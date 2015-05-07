@@ -43,8 +43,30 @@ LOGIN_SENHA = os.environ['MORPH_LOGIN_SENHA']
 
 #%%
 
+def ExtractPlayerDF(Data):
+    colNames = ['Date', 'Round', 'Opponent', 'MP', 'GS', 'A', 'CS', 'GC', 'OG', 'PS',
+                'PM', 'YC', 'RC', 'S', 'B', 'ESP', 'BPS', 'NT', 'Value', 'Points']
+    fixtures = Data['fixture_history']['all']
+    playerDF = pandas.DataFrame(fixtures, columns = colNames)
+
+    playerDF['ID'] = Data['id']
+    playerDF['Code'] = Data['code']
+    playerDF['WebName'] = Data['web_name']
+    playerDF['FirstName'] = Data['first_name']
+    playerDF['SecondName'] = Data['second_name']
+    playerDF['Position'] = Data['type_name']
+    playerDF['Team'] = Data['team_name']
+
+    colOrder = ['ID', 'Code', 'Round', 'WebName', 'FirstName', 'SecondName', 'Position', 'Team',
+                'Date', 'Opponent', 'MP', 'GS', 'A', 'CS', 'GC', 'OG', 'PS', 'PM', 'YC',
+                'RC', 'S', 'B', 'ESP', 'BPS', 'NT', 'Value', 'Points']
+
+    return playerDF[colOrder]
+
+#%%
+
 ## Download dados
-print '[LOG] Download Iniciado'
+print '[LOG] Downloading Data Started'
 
 # Inicialisa browser
 br = mechanize.Browser()
@@ -79,21 +101,25 @@ for i in it.count(1):
     if pgAtual == pgTotal:
         break
 
-print '[LOG] Download Terminado'
+print '[LOG] Downloading Data Ended'
+
+#%%
+
+## Minera Rodada
+rodada = jsonRaw[0]['rodada_id'] - 1
+
+#%%
+
+# Concatena lista de atletas dos arquivos
+atletasJSON = [j['atleta'] for j in jsonRaw]
+atletasJSON = list(it.chain(*atletasJSON))
 
 #%%
 
 ## Minera Scouts
 ## e concatena em um DataFrame
 
-print '[LOG] Processando dados'
-
-# Concatena lista de atletas dos arquivos
-atletasJSON = [j['atleta'] for j in jsonRaw]
-atletasJSON = list(it.chain(*atletasJSON))
-
-## Minera Rodada
-rodada = jsonRaw[0]['rodada_id'] - 1
+print '[LOG] Processing Data Started'
 
 # Scouts
 ScoutsDict = []
@@ -116,14 +142,19 @@ for atleta in atletasJSON:
     scoutDict['PartidaData'] = atleta['partida_data']
 
     ScoutsDict.append(scoutDict)
+    
+#ScoutsDFColOrder = ['Rodada', 'Atleta', 'Apelido', 'Clube', 'Posicao', 'Status', 'Pontos', 'PontosMedia', 'Preco',
+#                    'PrecoVariacao', 'Mando', 'PartidaCasa', 'PartidaVisitante', 'PartidaData', 'FS', 'PE', 'A', 'FT',
+#                    'FD', 'FF', 'G', 'I', 'PP', 'RB', 'FC', 'GC', 'CA', 'CV', 'SG', 'DD', 'DP', 'GS']
+#ScoutsDF = pd.DataFrame(ScoutsDict, columns = ScoutsDFColOrder)
 
-print '[LOG] Processamento de dados terminado'
+print '[LOG] Processing Data Ended'
 
 #%%
 
-## Salva dados para SQLite
+## Save DataFrame to SQLite
 
-print '[LOG] Salvando dados'
+print '[LOG] Transfering data to SQLite format'
 
 scraperwiki.sqlite.save(unique_keys = ['Atleta', 'Rodada'],
                         data = ScoutsDict,
