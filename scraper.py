@@ -138,7 +138,12 @@ print '[LOG] Atualizando Status'
 
 SCOUTS_UPDATE_STATUS_QUERY = 'UPDATE data SET Status = ? WHERE Rodada = ? AND Atleta = ?'
 
-scraperwiki.sqlite.execute(SCOUTS_UPDATE_STATUS_QUERY, 
-                           [[s['Status'], s['Rodada'], s['Atleta']] for s in ScoutsDict])
+# Versão lenta
+for s in ScoutsDict:
+        scraperwiki.sqlite.execute(SCOUTS_UPDATE_STATUS_QUERY,
+                                   [s['Status'], s['Rodada'], s['Atleta']])
+# Versão rapida
+#scraperwiki.sqlite.execute(SCOUTS_UPDATE_STATUS_QUERY, 
+#                           [[s['Status'], s['Rodada'], s['Atleta']] for s in ScoutsDict])
     
 print '[LOG] Dados Salvos'
