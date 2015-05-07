@@ -126,5 +126,19 @@ print '[LOG] Processamento de dados terminado'
 print '[LOG] Salvando dados'
 
 scraperwiki.sqlite.save(unique_keys = ['Atleta', 'Rodada'],
-                        data = ScoutsDict)
+                        data = ScoutsDict,
+                        table_name = 'data')
 
+
+#%%
+
+## Atualiza Status de cada Atleta
+
+print '[LOG] Atualizando Status'
+
+SCOUTS_UPDATE_STATUS_QUERY = 'UPDATE data SET Status = ? WHERE Rodada = ? AND Atleta = ?'
+
+scraperwiki.sqlite.execute(SCOUTS_UPDATE_STATUS_QUERY, 
+                           [[s['Status'], s['Rodada'], s['Atleta']] for s in ScoutsDict])
+    
+print '[LOG] Dados Salvos'
