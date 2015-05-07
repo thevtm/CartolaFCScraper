@@ -27,6 +27,7 @@
 
 #%%
 
+import os
 import itertools as it
 import json
 import scraperwiki
@@ -37,8 +38,8 @@ import mechanize
 ## Consts
 JOGADORES_URL = 'http://cartolafc.globo.com/mercado/filtrar.json?page='
 LOGIN_URL = 'https://loginfree.globo.com/login/438'
-LOGIN_EMAIL = MORPH_LOGIN_EMAIL
-LOGIN_SENHA = MORPH_LOGIN_SENHA
+LOGIN_EMAIL = os.environ['MORPH_LOGIN_EMAIL']
+LOGIN_SENHA = os.environ['MORPH_LOGIN_SENHA']
 
 #%%
 
