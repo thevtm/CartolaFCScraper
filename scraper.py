@@ -43,28 +43,6 @@ LOGIN_SENHA = os.environ['MORPH_LOGIN_SENHA']
 
 #%%
 
-def ExtractPlayerDF(Data):
-    colNames = ['Date', 'Round', 'Opponent', 'MP', 'GS', 'A', 'CS', 'GC', 'OG', 'PS',
-                'PM', 'YC', 'RC', 'S', 'B', 'ESP', 'BPS', 'NT', 'Value', 'Points']
-    fixtures = Data['fixture_history']['all']
-    playerDF = pandas.DataFrame(fixtures, columns = colNames)
-
-    playerDF['ID'] = Data['id']
-    playerDF['Code'] = Data['code']
-    playerDF['WebName'] = Data['web_name']
-    playerDF['FirstName'] = Data['first_name']
-    playerDF['SecondName'] = Data['second_name']
-    playerDF['Position'] = Data['type_name']
-    playerDF['Team'] = Data['team_name']
-
-    colOrder = ['ID', 'Code', 'Round', 'WebName', 'FirstName', 'SecondName', 'Position', 'Team',
-                'Date', 'Opponent', 'MP', 'GS', 'A', 'CS', 'GC', 'OG', 'PS', 'PM', 'YC',
-                'RC', 'S', 'B', 'ESP', 'BPS', 'NT', 'Value', 'Points']
-
-    return playerDF[colOrder]
-
-#%%
-
 ## Download dados
 print '[LOG] Downloading Data Started'
 
@@ -137,16 +115,12 @@ for atleta in atletasJSON:
     scoutDict['Preco'] = float(atleta['preco'])
     scoutDict['PrecoVariacao'] = float(atleta['variacao'])
     scoutDict['Mando'] = atleta['clube']['id'] == atleta['partida_clube_visitante']['id']
+    scoutDict['Jogos'] = atleta['jogos']
     scoutDict['PartidaCasa'] = atleta['partida_clube_casa']['abreviacao']
     scoutDict['PartidaVisitante'] = atleta['partida_clube_visitante']['abreviacao']
     scoutDict['PartidaData'] = atleta['partida_data']
 
     ScoutsDict.append(scoutDict)
-    
-#ScoutsDFColOrder = ['Rodada', 'Atleta', 'Apelido', 'Clube', 'Posicao', 'Status', 'Pontos', 'PontosMedia', 'Preco',
-#                    'PrecoVariacao', 'Mando', 'PartidaCasa', 'PartidaVisitante', 'PartidaData', 'FS', 'PE', 'A', 'FT',
-#                    'FD', 'FF', 'G', 'I', 'PP', 'RB', 'FC', 'GC', 'CA', 'CV', 'SG', 'DD', 'DP', 'GS']
-#ScoutsDF = pd.DataFrame(ScoutsDict, columns = ScoutsDFColOrder)
 
 print '[LOG] Processing Data Ended'
 
@@ -160,21 +134,4 @@ scraperwiki.sqlite.save(unique_keys = ['Atleta', 'Rodada'],
                         data = ScoutsDict,
                         table_name = 'data')
 
-
-#%%
-
-## Atualiza Status de cada Atleta
-
-print '[LOG] Atualizando Status'
-
-SCOUTS_UPDATE_STATUS_QUERY = 'UPDATE data SET Status = ? WHERE Rodada = ? AND Atleta = ?'
-
-# Versão lenta
-for s in ScoutsDict:
-        scraperwiki.sqlite.execute(SCOUTS_UPDATE_STATUS_QUERY,
-                                   [s['Status'], s['Rodada'], s['Atleta']])
-# Versão rapida
-#scraperwiki.sqlite.execute(SCOUTS_UPDATE_STATUS_QUERY, 
-#                           [[s['Status'], s['Rodada'], s['Atleta']] for s in ScoutsDict])
-    
 print '[LOG] Dados Salvos'
