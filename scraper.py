@@ -84,6 +84,9 @@ print '[LOG] Downloading Data Ended'
 #%%
 
 ## Minera Rodada
+
+print '[LOG] Processing Data Started'
+
 rodada = jsonRaw[0]['rodada_id'] - 1
 
 #%%
@@ -96,8 +99,6 @@ atletasJSON = list(it.chain(*atletasJSON))
 
 ## Minera Scouts
 ## e concatena em um DataFrame
-
-print '[LOG] Processing Data Started'
 
 # Scouts
 ScoutsDict = []
@@ -128,7 +129,7 @@ print '[LOG] Processing Data Ended'
 
 ## Save DataFrame to SQLite
 
-print '[LOG] Transfering data to SQLite format'
+print '[LOG] Transferindo dados para SQLite'
 
 scraperwiki.sqlite.save(unique_keys = ['Atleta', 'Rodada'],
                         data = ScoutsDict,
