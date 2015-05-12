@@ -1,1 +1,3 @@
-This is a scraper that runs on [Morph](https://morph.io). To get started [see the documentation](https://morph.io/documentation)
+Este é um scraper que roda na plataforma [Morph](https://morph.io).
+
+[Download Dados](https://morph.io/thevtm/CartolaFCScraper)
