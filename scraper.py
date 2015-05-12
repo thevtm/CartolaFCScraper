@@ -32,22 +32,36 @@ import itertools as it
 import json
 import scraperwiki
 import mechanize
+import cookielib
 
 #%%
 
 ## Consts
-JOGADORES_URL = 'http://cartolafc.globo.com/mercado/filtrar.json?page='
+SCOUTS_URL = 'http://cartolafc.globo.com/mercado/filtrar.json?page='
 LOGIN_URL = 'https://loginfree.globo.com/login/438'
 LOGIN_EMAIL = os.environ['MORPH_LOGIN_EMAIL']
 LOGIN_SENHA = os.environ['MORPH_LOGIN_SENHA']
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
 
 #%%
 
-## Download dados
+## Cria o mechanize browser
 print '[LOG] Downloading Data Started'
 
 # Inicialisa browser
 br = mechanize.Browser()
+
+# Cookie Jar
+cj = cookielib.LWPCookieJar()
+br.set_cookiejar(cj)
+
+# Define user-agent
+br.addheaders = [('User-agent', USER_AGENT)]
+
+
+#%%
+
+## Loga no CartolaFC
 
 # Abre a página de login Cartola através do mechanize
 br.open(LOGIN_URL)
@@ -63,9 +77,13 @@ br.form['login-passaporte'] = LOGIN_EMAIL
 br.form['senha-passaporte'] = LOGIN_SENHA
 br.submit()
 
+#%%
+
+## Download Scouts
+
 jsonRaw = []
 for i in it.count(1):    
-    url = JOGADORES_URL + str(i)
+    url = SCOUTS_URL + str(i)
     
     r = br.open(url)
     j = json.loads(r.read())
