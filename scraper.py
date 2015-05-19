@@ -39,8 +39,8 @@ import cookielib
 ## Consts
 SCOUTS_URL = 'http://cartolafc.globo.com/mercado/filtrar.json?page='
 LOGIN_URL = 'https://loginfree.globo.com/login/438'
-LOGIN_EMAIL = os.environ['MORPH_LOGIN_EMAIL']
-LOGIN_SENHA = os.environ['MORPH_LOGIN_SENHA']
+LOGIN_EMAIL = os.environ['MORPH_LOGIN_EMAIL'] ## CartolaFC Login
+LOGIN_SENHA = os.environ['MORPH_LOGIN_SENHA'] ## CartolaFC Senha
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
 
 #%%
@@ -126,7 +126,7 @@ for atleta in atletasJSON:
     scoutDict['Rodada'] = rodada
     scoutDict['Atleta'] = atleta['id']
     scoutDict['Apelido'] = atleta['apelido']
-    scoutDict['Clube'] = atleta['clube']['abreviacao']
+    scoutDict['Clube'] = atleta['clube']['slug']
     scoutDict['Posicao'] = atleta['posicao']['abreviacao']
     scoutDict['Status'] = atleta['status']
     scoutDict['Pontos'] = float(atleta['pontos'])
@@ -135,8 +135,8 @@ for atleta in atletasJSON:
     scoutDict['PrecoVariacao'] = float(atleta['variacao'])
     scoutDict['Mando'] = atleta['clube']['id'] == atleta['partida_clube_visitante']['id']
     scoutDict['Jogos'] = atleta['jogos']
-    scoutDict['PartidaCasa'] = atleta['partida_clube_casa']['abreviacao']
-    scoutDict['PartidaVisitante'] = atleta['partida_clube_visitante']['abreviacao']
+    scoutDict['PartidaCasa'] = atleta['partida_clube_casa']['slug']
+    scoutDict['PartidaVisitante'] = atleta['partida_clube_visitante']['slug']
     scoutDict['PartidaData'] = atleta['partida_data']
 
     ScoutsDict.append(scoutDict)
