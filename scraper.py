@@ -133,7 +133,7 @@ for atleta in atletasJSON:
     scoutDict['PontosMedia'] = float(atleta['media'])
     scoutDict['Preco'] = float(atleta['preco'])
     scoutDict['PrecoVariacao'] = float(atleta['variacao'])
-    scoutDict['Mando'] = atleta['clube']['id'] == atleta['partida_clube_visitante']['id']
+    scoutDict['Mando'] = atleta['clube']['id'] == atleta['partida_clube_casa']['id']
     scoutDict['Jogos'] = atleta['jogos']
     scoutDict['PartidaCasa'] = atleta['partida_clube_casa']['slug']
     scoutDict['PartidaVisitante'] = atleta['partida_clube_visitante']['slug']
