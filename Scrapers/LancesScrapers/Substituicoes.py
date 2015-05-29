@@ -54,8 +54,6 @@ def ScrapeSubstituicoes(LancesJSON):
         sDict['EntrouAtletaID'] =  s['substituicao']['substituido_por']['pessoa_id']
         sDict['EntrouTitular'] =  s['substituicao']['substituido_por']['titular']
         sDict['EntrouPosicao'] =  s['substituicao']['substituido_por']['posicao']
-
-
         SubstituicoesDict.append(sDict)
 
     print '[LOG] Processamento de Lances.Substituições Terminado'

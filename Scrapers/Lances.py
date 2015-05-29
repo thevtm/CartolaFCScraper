@@ -28,7 +28,7 @@ import json
 from lxml import html
 import scraperwiki
 from LancesScrapers import Substituicoes
-
+from LancesScrapers import Cartoes
 
 def ScrapeLances(USER_AGENT):
 
@@ -77,6 +77,9 @@ def ScrapeLances(USER_AGENT):
 
     # Minera Substituicoes
     Substituicoes.ScrapeSubstituicoes(LancesJSON)
+
+    # Minera Cartões
+    Cartoes.ScrapeCartoes(LancesJSON)
 
     print '[LOG] Processamento de Lances Terminado'
 
