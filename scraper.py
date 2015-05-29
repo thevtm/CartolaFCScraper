@@ -26,6 +26,7 @@
 import os
 from Scrapers import Scouts
 from Scrapers import Partidas
+from Scrapers import Lances
 
 # Consts
 LOGIN_EMAIL = os.environ['MORPH_LOGIN_EMAIL'] ## CartolaFC Login
@@ -42,3 +43,6 @@ Scouts.ScrapeScouts(LOGIN_EMAIL, LOGIN_SENHA, USER_AGENT)
 
 # Scrape Partidas
 Partidas.ScrapePartidas(PartidasID, USER_AGENT)
+
+# Scrape Lances
+Lances.ScrapeLances(USER_AGENT)
