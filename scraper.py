@@ -25,11 +25,20 @@
 
 import os
 from Scrapers import Scouts
+from Scrapers import Partidas
 
 # Consts
 LOGIN_EMAIL = os.environ['MORPH_LOGIN_EMAIL'] ## CartolaFC Login
 LOGIN_SENHA = os.environ['MORPH_LOGIN_SENHA'] ## CartolaFC Senha
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
 
+# Carrega ids das partidas
+
+with open('Data/PartidasID.txt') as f:
+    PartidasID = [int(n) for n in f.readlines()]
+
 # Scrape Scouts
 Scouts.ScrapeScouts(LOGIN_EMAIL, LOGIN_SENHA, USER_AGENT)
+
+# Scrape Partidas
+Partidas.ScrapePartidas(PartidasID, USER_AGENT)
