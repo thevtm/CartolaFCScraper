@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# <nbformat>3.0</nbformat>
-
 
 # The MIT License (MIT)
 ##
@@ -63,8 +61,8 @@ def ScrapeScouts(LOGIN_EMAIL, LOGIN_SENHA, USER_AGENT):
     # senha que permitam fazer o login.
 
     br.select_form(nr=0)
-    br.form['login-passaporte'] = LOGIN_EMAIL
-    br.form['senha-passaporte'] = LOGIN_SENHA
+    br.form['login-passaporte'] = LOGIN_EMAIL ## CartolaFC Login
+    br.form['senha-passaporte'] = LOGIN_SENHA ## CartolaFC Senha
     br.submit()
 
     # Download Scouts

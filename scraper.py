@@ -26,10 +26,9 @@
 import os
 from Scrapers import Scouts
 
-
 # Consts
-LOGIN_EMAIL = os.environ['MORPH_LOGIN_EMAIL']
-LOGIN_SENHA = os.environ['MORPH_LOGIN_SENHA']
+LOGIN_EMAIL = os.environ['MORPH_LOGIN_EMAIL'] ## CartolaFC Login
+LOGIN_SENHA = os.environ['MORPH_LOGIN_SENHA'] ## CartolaFC Senha
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
 
 # Scrape Scouts
