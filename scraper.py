@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# <nbformat>3.0</nbformat>
-
 
 # The MIT License (MIT)
 ##
@@ -26,7 +24,7 @@
 
 
 import os
-import Scouts
+from Scrapers import Scouts
 
 
 # Consts
