@@ -29,6 +29,7 @@ from lxml import html
 import scraperwiki
 from LancesScrapers import Substituicoes
 from LancesScrapers import Cartoes
+from LancesScrapers import Gols
 
 def ScrapeLances(USER_AGENT):
 
@@ -69,7 +70,7 @@ def ScrapeLances(USER_AGENT):
     # Concatena Lances
     LancesJSON = list(it.chain.from_iterable(LancesJSON))
 
-    print '[LOG] Download Substituições Terminado'
+    print '[LOG] Download Lances Terminado'
 
 
     # Minera dados
@@ -80,6 +81,9 @@ def ScrapeLances(USER_AGENT):
 
     # Minera Cartões
     Cartoes.ScrapeCartoes(LancesJSON)
+
+    # Minera Gols
+    Gols.ScrapeGols(LancesJSON)
 
     print '[LOG] Processamento de Lances Terminado'
 
