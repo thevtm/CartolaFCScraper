@@ -65,4 +65,4 @@ PartidasID = [p['ID'] for p in PartidasData if p['Rodada'] == ultimaRodada]
 Partidas.ScrapePartidas(PartidasID, USER_AGENT)
 
 # Scrape Lances
-Lances.ScrapeLances(USER_AGENT)
+Lances.ScrapeLances(ultimaRodada, USER_AGENT)

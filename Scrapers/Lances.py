@@ -31,22 +31,20 @@ from LancesScrapers import Substituicoes
 from LancesScrapers import Cartoes
 from LancesScrapers import Gols
 
-def ScrapeLances(USER_AGENT):
+def ScrapeLances(Rodada, USER_AGENT):
 
     # Consts
     PARTIDAS_RODADA_URL = 'http://globoesporte.globo.com/servico/esportes_campeonato/responsivo/widget-uuid/09021843-e53d-4020-80f7-302a15756585/fases/fase-unica-brasileiro-2015/rodada/{0}/jogos.html'
     LANCES_URL = 'mensagens.json'
-    TOTAL_RODADA = 38
 
 
     # Fetch links das Partidas
 
     print '[LOG] Obtendo os links dos Lances'
 
-    PartidasRodadaLinks = [PARTIDAS_RODADA_URL.format(i) for i in range(1, TOTAL_RODADA + 1)]
-    PartidasRodadaLinksData = [scraperwiki.scrape(u, user_agent=USER_AGENT) for u in PartidasRodadaLinks]
-    PartidasLinks = [html.fromstring(d).xpath('//a/@href') for d in PartidasRodadaLinksData]
-    PartidasLinks = list(it.chain.from_iterable(PartidasLinks))
+    PartidasRodadaLink = PARTIDAS_RODADA_URL.format(Rodada)
+    PartidasRodadaLinkData = scraperwiki.scrape(PartidasRodadaLink, user_agent=USER_AGENT)
+    PartidasLinks = html.fromstring(PartidasRodadaLinkData).xpath('//a/@href')
 
     print '[LOG] Links das Lances obtidos'
 
