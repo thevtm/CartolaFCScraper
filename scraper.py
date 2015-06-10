@@ -24,6 +24,8 @@
 
 
 import os
+import json
+import scraperwiki
 from Scrapers import Scouts
 from Scrapers import Partidas
 from Scrapers import Lances
@@ -32,16 +34,34 @@ from Scrapers import Lances
 LOGIN_EMAIL = os.environ['MORPH_LOGIN_EMAIL'] ## CartolaFC Login
 LOGIN_SENHA = os.environ['MORPH_LOGIN_SENHA'] ## CartolaFC Senha
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+PARTIDAS_DATA = 'Data/Partidas.json'
+
+# Functions
+def FetchUltimaRodadaDosScouts():
+    try:
+        Rodada = scraperwiki.sqlite.select("max(Rodada) as Rodada from data")[0]['Rodada']
+    except Exception, e:
+        DEFAULT_RODADA_ERROR = 0
+        print '[ERROR] Nao foi possivel obter a ultima rodada da tabela Scouts, usando rodada:', DEFAULT_RODADA_ERROR
+        Rodada = DEFAULT_RODADA_ERROR
+    else:
+        print '[LOG] Ultima rodada na tabela Scouts:', Rodada
+    finally:
+        return Rodada
+    
 
 # Carrega ids das partidas
-
-with open('Data/PartidasID.txt') as f:
-    PartidasID = [int(n) for n in f.readlines()]
+with open(PARTIDAS_DATA) as f:
+    PartidasData = json.load(f)
 
 # Scrape Scouts
 Scouts.ScrapeScouts(LOGIN_EMAIL, LOGIN_SENHA, USER_AGENT)
 
+# Obtem a ultima rodada da tabela Scouts
+ultimaRodada = FetchUltimaRodadaDosScouts()
+
 # Scrape Partidas
+PartidasID = [p['ID'] for p in PartidasData if p['Rodada'] == ultimaRodada]
 Partidas.ScrapePartidas(PartidasID, USER_AGENT)
 
 # Scrape Lances
