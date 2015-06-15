@@ -29,9 +29,7 @@ import scraperwiki
 import mechanize
 import cookielib
 
-
-def ScrapeScouts(LOGIN_EMAIL, LOGIN_SENHA, USER_AGENT):
-
+def DownloadScouts(LOGIN_EMAIL, LOGIN_SENHA, USER_AGENT):
     # Consts
     SCOUTS_URL = 'http://cartolafc.globo.com/mercado/filtrar.json?page='
     LOGIN_URL = 'https://loginfree.globo.com/login/438'
@@ -71,9 +69,9 @@ def ScrapeScouts(LOGIN_EMAIL, LOGIN_SENHA, USER_AGENT):
     for i in it.count(1):
         url = SCOUTS_URL + str(i)
 
-        r = br.open(url)
-        j = json.loads(r.read())
-        jsonRaw.append(j)
+        r = br.open(url).read()
+        j = json.loads(r)
+        jsonRaw.append(r)
 
         pgAtual = int(j['page']['atual'])
         pgTotal = int(j['page']['total'])
@@ -85,10 +83,13 @@ def ScrapeScouts(LOGIN_EMAIL, LOGIN_SENHA, USER_AGENT):
 
     print '[LOG] Downloading Scouts Terminado'
 
-    # Minera Rodada
+    return jsonRaw
 
+
+def ProcessScouts(jsonRaw):
     print '[LOG] Processamento de Scouts Iniciado'
 
+    # Minera Rodada
     rodada = jsonRaw[0]['rodada_id'] - 1
 
     # Concatena lista de atletas dos arquivos
@@ -121,6 +122,18 @@ def ScrapeScouts(LOGIN_EMAIL, LOGIN_SENHA, USER_AGENT):
         ScoutsDict.append(scoutDict)
 
     print '[LOG] Processamento de Scouts Terminado'
+
+    return ScoutsDict
+
+
+def ScrapeScouts(LOGIN_EMAIL, LOGIN_SENHA, USER_AGENT):
+
+    # Download dados
+    jsonRaw = DownloadScouts(LOGIN_EMAIL, LOGIN_SENHA, USER_AGENT)
+
+    # Processa dados
+    jsonRaw = [json.loads(j) for j in jsonRaw]
+    ScoutsDict = ProcessScouts(jsonRaw)
 
     # Save DataFrame to SQLite
 
