@@ -107,7 +107,9 @@ def ProcessScouts(jsonRaw):
         scoutDict['Atleta'] = atleta['id']
         scoutDict['Apelido'] = atleta['apelido']
         scoutDict['Clube'] = atleta['clube']['slug']
+        scoutDict['ClubeID'] = atleta['clube']['id']
         scoutDict['Posicao'] = atleta['posicao']['abreviacao']
+        scoutDict['PosicaoID'] = atleta['posicao']['id']
         scoutDict['Status'] = atleta['status']
         scoutDict['Pontos'] = float(atleta['pontos'])
         scoutDict['PontosMedia'] = float(atleta['media'])
@@ -116,7 +118,9 @@ def ProcessScouts(jsonRaw):
         scoutDict['Mando'] = atleta['clube']['id'] == atleta['partida_clube_casa']['id']
         scoutDict['Jogos'] = atleta['jogos']
         scoutDict['PartidaCasa'] = atleta['partida_clube_casa']['slug']
+        scoutDict['PartidaCasaID'] = atleta['partida_clube_casa']['id']
         scoutDict['PartidaVisitante'] = atleta['partida_clube_visitante']['slug']
+        scoutDict['PartidaVisitanteID'] = atleta['partida_clube_visitante']['id']
         scoutDict['PartidaData'] = atleta['partida_data']
 
         ScoutsDict.append(scoutDict)
