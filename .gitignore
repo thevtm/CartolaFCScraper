@@ -1,3 +1,5 @@
 # Ignore output of scraper
 data.sqlite
 *.pyc
+*.sublime-workspace
+CartolaFCScraper.sublime-project
