@@ -48,6 +48,13 @@ def ScrapeGols(LancesJSON):
         gDict['Apelido'] = g['gol']['autor']
         gDict['AtletaID'] = g['gol']['autor_id']
         gDict['Contra'] = g['gol']['contra']
+
+        # Minera ID do clube
+        if(g['jogo']['equipe_mandante']['nome'] == g['nome_time']):
+            gDict['TimeID'] = g['jogo']['equipe_mandante']['id']
+        else:
+            gDict['TimeID'] = g['jogo']['equipe_visitante']['id']
+
         GolsDict.append(gDict)
 
     print '[LOG] Processamento de Lances.Gols Terminado'
