@@ -48,6 +48,13 @@ def ScrapeCartoes(LancesJSON):
         cDict['Apelido'] = c['cartao']['nome_jogador']
         cDict['AtletaID'] = c['cartao']['jogador_id']
         cDict['Cartao'] = c['cartao']['tipo']
+
+        # Minera ID do clube
+        if(c['jogo']['equipe_mandante']['nome'] == c['nome_time']):
+            cDict['TimeID'] = c['jogo']['equipe_mandante']['id']
+        else:
+            cDict['TimeID'] = c['jogo']['equipe_visitante']['id']
+
         CartoesDict.append(cDict)
 
     print '[LOG] Processamento de Lances.Cartões Terminado'
