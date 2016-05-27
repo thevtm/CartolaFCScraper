@@ -1,6 +1,0 @@
-# Install custom version of scraperwiki library
--e git+http://github.com/openaustralia/scraperwiki-python.git@morph_defaults#egg=scraperwiki
-
-# Libs
-mechanize==0.2.5
-lxml==3.4.4

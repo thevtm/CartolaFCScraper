@@ -1,0 +1,30 @@
+{
+  "name": "cartola-fc-scraper",
+  "version": "0.0.1",
+  "description": "Este é um scraper que roda na plataforma [Morph](https://morph.io).",
+  "main": "scraper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thevtm/CartolaFCScraper.git"
+  },
+  "keywords": [
+    "CartolaFC",
+    "Scraper"
+  ],
+  "author": "Vinícius Tabille Manjabosco",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thevtm/CartolaFCScraper/issues"
+  },
+  "homepage": "https://github.com/thevtm/CartolaFCScraper#readme",
+  "engines": {
+    "node": "6.2.0"
+  },
+  "dependencies": {
+    "request-promise": "^3.0.0",
+    "sqlite3": "^3.1.4"
+  }
+}
