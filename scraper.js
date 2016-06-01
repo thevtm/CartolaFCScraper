@@ -1,3 +1,5 @@
+var async = require('asyncawait/async');
+var await = require('asyncawait/await');
 let Promise = require("bluebird");
 let rp = require('request-promise');
 let sqlite3 = require("sqlite3").verbose();
@@ -12,50 +14,60 @@ const API_CLUBES = 'https://api.cartolafc.globo.com/clubes'
 
 
 /* REQUEST FILES */
-console.log('Requisitando os arquivos...')
 
 let requests_datetime = new Date();
 
-let requests = Promise.join(
-  rp(API_MERCADO_STATUS),
-  rp(API_ATLETAS_MERCADO),
-  rp(API_ATLETAS_PONTUADOS),
-  rp(API_PARTIDAS),
-  rp(API_CLUBES)
-)
+async (function () {
+  console.log('Requisitando os arquivos...')
 
-/* STORE FILES */
-requests.spread(
-  (mercadoStatus, atletasMercado, atletasPontuados, partidas, clubes) => {
+  console.log('Requisitando API_MERCADO_STATUS...')
+  let mercado_status = await (rp(API_MERCADO_STATUS))
 
-    console.log('Arquivos requisitados com sucesso.')
+  console.log('Requisitando API_ATLETAS_MERCADO...')
+  let atletas_mercado = await (rp(API_ATLETAS_MERCADO))
 
-    // Open a database handle
-    let db = new sqlite3.Database("data.sqlite");
-    db.serialize(
-      () => {
+  console.log('Requisitando API_PARTIDAS...')
+  let partidas = await (rp(API_PARTIDAS))
 
-        console.log('Armazenando dados no banco de dados...')
+  console.log('Requisitando API_CLUBES...')
+  let clubes = await (rp(API_CLUBES))
 
-        // Create new table
-        db.run(`CREATE TABLE IF NOT EXISTS data
-          (
-            DataHora TEXT,
-            API_MERCADO_STATUS TEXT,
-            API_ATLETAS_MERCADO TEXT,
-            API_ATLETAS_PONTUADOS TEXT,
-            API_PARTIDAS TEXT,
-            API_CLUBES TEXT
-          )`);
-
-        // Insert a new record
-        let statement = db.prepare("INSERT INTO data VALUES (?, ?, ?, ?, ?, ?)");
-        statement.run(requests_datetime.toISOString(), mercadoStatus,
-          atletasMercado, atletasPontuados, partidas, clubes);
-        statement.finalize();
-
-        console.log('Dados armazenados no banco de dados com sucesso.')
-      }
-    )
+  // Parciais nem sempre estão disponiveis
+  let atletas_pontuados
+  try {
+    console.log('Requisitando API_ATLETAS_PONTUADOS...')
+    atletas_pontuados = await (rp(API_ATLETAS_PONTUADOS))
+  } catch (e) {
+    atletas_pontuados = null
   }
-)
+
+  console.log('Arquivos requisitados com sucesso.')
+
+  // Open a database handle
+  let db = new sqlite3.Database("data.sqlite");
+  db.serialize(
+    () => {
+
+      console.log('Armazenando dados no banco de dados...')
+
+      // Create new table
+      db.run(`CREATE TABLE IF NOT EXISTS data
+        (
+          DataHora TEXT,
+          API_MERCADO_STATUS TEXT,
+          API_ATLETAS_MERCADO TEXT,
+          API_ATLETAS_PONTUADOS TEXT,
+          API_PARTIDAS TEXT,
+          API_CLUBES TEXT
+        )`);
+
+      // Insert a new record
+      let statement = db.prepare("INSERT INTO data VALUES (?, ?, ?, ?, ?, ?)");
+      statement.run(requests_datetime.toISOString(), mercado_status,
+        atletas_mercado, atletas_pontuados, partidas, clubes);
+      statement.finalize();
+
+      console.log('Dados armazenados no banco de dados com sucesso.')
+    }
+  )
+})()
