@@ -5,7 +5,7 @@ O scraper apenas armazena os dados obtidos do CartolaFC, nenhuma modificação �
 
 [Pagina do CartolaFCScraper no Morph.](https://morph.io/thevtm/CartolaFCScraper)
 
-[Dados das verções anteriores.](https://github.com/thevtm/CartolaFCDados)
+[Dados das versões anteriores.](https://github.com/thevtm/CartolaFCDados)
 
 ## API
 
