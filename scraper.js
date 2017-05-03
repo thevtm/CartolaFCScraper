@@ -1,3 +1,5 @@
+'use strict'
+
 let async = require('asyncawait/async')
 let await = require('asyncawait/await')
 let Promise = require('bluebird')
