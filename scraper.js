@@ -1,8 +1,9 @@
-var async = require('asyncawait/async');
-var await = require('asyncawait/await');
-let Promise = require("bluebird");
-let rp = require('request-promise');
-let sqlite3 = require("sqlite3").verbose();
+let async = require('asyncawait/async')
+let await = require('asyncawait/await')
+let Promise = require('bluebird')
+let request = require('request')
+let rp = require('request-promise')
+let sqlite3 = require("sqlite3").verbose()
 
 /* CONSTANTS */
 
@@ -12,6 +13,12 @@ const API_ATLETAS_PONTUADOS = 'https://api.cartolafc.globo.com/atletas/pontuados
 const API_PARTIDAS = 'https://api.cartolafc.globo.com/partidas'
 const API_CLUBES = 'https://api.cartolafc.globo.com/clubes'
 
+const headers = {
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'Accept-Encoding': 'gzip, deflate, sdch, br',
+  'Accept-Language': 'en-US,en;q=0.8',
+  'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36'
+}
 
 /* REQUEST FILES */
 
@@ -21,22 +28,22 @@ async (function () {
   console.log('Requisitando os arquivos...')
 
   console.log('Requisitando API_MERCADO_STATUS...')
-  let mercado_status = await (rp(API_MERCADO_STATUS))
+  let mercado_status = await (rp({ uri: API_MERCADO_STATUS, headers: headers }))
 
   console.log('Requisitando API_ATLETAS_MERCADO...')
-  let atletas_mercado = await (rp(API_ATLETAS_MERCADO))
+  let atletas_mercado = await (rp({ uri: API_ATLETAS_MERCADO, headers: headers }))
 
   console.log('Requisitando API_PARTIDAS...')
-  let partidas = await (rp(API_PARTIDAS))
+  let partidas = await (rp({ uri: API_PARTIDAS, headers: headers }))
 
   console.log('Requisitando API_CLUBES...')
-  let clubes = await (rp(API_CLUBES))
+  let clubes = await (rp({ uri: API_CLUBES, headers: headers }))
 
   // Parciais nem sempre estão disponiveis
   let atletas_pontuados
   try {
     console.log('Requisitando API_ATLETAS_PONTUADOS...')
-    atletas_pontuados = await (rp(API_ATLETAS_PONTUADOS))
+    atletas_pontuados = await (rp({ uri: API_ATLETAS_PONTUADOS, headers: headers }))
   } catch (e) {
     atletas_pontuados = null
   }
