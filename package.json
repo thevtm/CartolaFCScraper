@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "asyncawait": "^1.0.3",
-    "request-promise": "^3.0.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0",
     "sqlite3": "^3.1.4"
   }
 }
