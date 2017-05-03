@@ -4,6 +4,7 @@
   "description": "Este é um scraper que roda na plataforma [Morph](https://morph.io).",
   "main": "scraper.js",
   "scripts": {
+    "start": "node scraper.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
