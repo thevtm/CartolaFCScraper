@@ -22,12 +22,10 @@
   },
   "homepage": "https://github.com/thevtm/CartolaFCScraper#readme",
   "engines": {
-    "node": "6.2.0"
+    "node": ">=9.0.0"
   },
   "dependencies": {
-    "asyncawait": "^1.0.3",
-    "request": "^2.81.0",
-    "request-promise": "^4.2.0",
-    "sqlite3": "^3.1.4"
+    "better-sqlite3": "^4.1.0",
+    "node-fetch": "^2.1.2"
   }
 }

@@ -5,12 +5,12 @@ O scraper apenas armazena os dados obtidos do CartolaFC, nenhuma modificação �
 
 [Pagina do CartolaFCScraper no Morph.](https://morph.io/thevtm/CartolaFCScraper)
 
-[Dados das versões anteriores.](https://github.com/thevtm/CartolaFCDados)
+[Dados das edições anteriores do CartolaFC.](https://github.com/thevtm/CartolaFCDados)
 
-## API
-
-    https://api.cartolafc.globo.com/mercado/status    
-    https://api.cartolafc.globo.com/atletas/mercado
-    https://api.cartolafc.globo.com/atletas/pontuados
-    https://api.cartolafc.globo.com/partidas
-    https://api.cartolafc.globo.com/clubes
+```
+https://api.cartolafc.globo.com/mercado/status
+https://api.cartolafc.globo.com/atletas/mercado
+https://api.cartolafc.globo.com/atletas/pontuados
+https://api.cartolafc.globo.com/partidas
+https://api.cartolafc.globo.com/clubes
+```

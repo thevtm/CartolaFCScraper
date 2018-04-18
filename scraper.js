@@ -1,79 +1,81 @@
 'use strict'
 
-let async = require('asyncawait/async')
-let await = require('asyncawait/await')
-let Promise = require('bluebird')
-let request = require('request')
-let rp = require('request-promise')
-let sqlite3 = require("sqlite3").verbose()
+const fetch = require("node-fetch")
+const Database = require("better-sqlite3")
 
-/* CONSTANTS */
+async function main() {
 
-const API_MERCADO_STATUS = 'https://api.cartolafc.globo.com/mercado/status'
-const API_ATLETAS_MERCADO = 'https://api.cartolafc.globo.com/atletas/mercado'
-const API_ATLETAS_PONTUADOS = 'https://api.cartolafc.globo.com/atletas/pontuados'
-const API_PARTIDAS = 'https://api.cartolafc.globo.com/partidas'
-const API_CLUBES = 'https://api.cartolafc.globo.com/clubes'
+  /* 1. Requisição dos arquivos */
 
-const headers = {
-  'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36'
-}
+  console.info('Requisitando os arquivos...')
 
-/* REQUEST FILES */
+  let requests_datetime = new Date()
 
-let requests_datetime = new Date();
+  const API_MERCADO_STATUS = 'https://api.cartolafc.globo.com/mercado/status'
+  const API_ATLETAS_MERCADO = 'https://api.cartolafc.globo.com/atletas/mercado'
+  const API_ATLETAS_PONTUADOS = 'https://api.cartolafc.globo.com/atletas/pontuados'
+  const API_PARTIDAS = 'https://api.cartolafc.globo.com/partidas'
+  const API_CLUBES = 'https://api.cartolafc.globo.com/clubes'
 
-async (function () {
-  console.log('Requisitando os arquivos...')
-
-  console.log('Requisitando API_MERCADO_STATUS...')
-  let mercado_status = await (rp({ uri: API_MERCADO_STATUS, headers: headers }))
-
-  console.log('Requisitando API_ATLETAS_MERCADO...')
-  let atletas_mercado = await (rp({ uri: API_ATLETAS_MERCADO, headers: headers }))
-
-  console.log('Requisitando API_PARTIDAS...')
-  let partidas = await (rp({ uri: API_PARTIDAS, headers: headers }))
-
-  console.log('Requisitando API_CLUBES...')
-  let clubes = await (rp({ uri: API_CLUBES, headers: headers }))
-
-  // Parciais nem sempre estão disponiveis
-  let atletas_pontuados
-  try {
-    console.log('Requisitando API_ATLETAS_PONTUADOS...')
-    atletas_pontuados = await (rp({ uri: API_ATLETAS_PONTUADOS, headers: headers }))
-  } catch (e) {
-    atletas_pontuados = null
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36'
+    }
   }
 
-  console.log('Arquivos requisitados com sucesso.')
+  console.info('Requisitando API_MERCADO_STATUS...')
+  const mercado_status = await fetch(API_MERCADO_STATUS, fetchOptions).then((res) => res.text())
+  console.info('API_MERCADO_STATUS obtido com sucesso.')
 
-  // Open a database handle
-  let db = new sqlite3.Database("data.sqlite");
-  db.serialize(
-    () => {
+  console.info('Requisitando API_ATLETAS_MERCADO...')
+  const atletas_mercado = await fetch(API_ATLETAS_MERCADO, fetchOptions).then((res) => res.text())
+  console.info('API_ATLETAS_MERCADO obtido com sucesso.')
 
-      console.log('Armazenando dados no banco de dados...')
+  console.info('Requisitando API_PARTIDAS...')
+  const partidas = await fetch(API_PARTIDAS, fetchOptions).then((res) => res.text())
+  console.info('API_PARTIDAS obtido com sucesso.')
 
-      // Create new table
-      db.run(`CREATE TABLE IF NOT EXISTS data
-        (
-          DataHora TEXT,
-          API_MERCADO_STATUS TEXT,
-          API_ATLETAS_MERCADO TEXT,
-          API_ATLETAS_PONTUADOS TEXT,
-          API_PARTIDAS TEXT,
-          API_CLUBES TEXT
-        )`);
+  console.info('Requisitando API_CLUBES...')
+  const clubes = await fetch(API_CLUBES, fetchOptions).then((res) => res.text())
+  console.info('API_CLUBES obtido com sucesso.')
 
-      // Insert a new record
-      let statement = db.prepare("INSERT INTO data VALUES (?, ?, ?, ?, ?, ?)");
-      statement.run(requests_datetime.toISOString(), mercado_status,
-        atletas_mercado, atletas_pontuados, partidas, clubes);
-      statement.finalize();
+  // Parciais nem sempre estão disponiveis
+  console.info('Requisitando API_ATLETAS_PONTUADOS...')
+  const atletas_pontuados = await fetch(API_ATLETAS_PONTUADOS).then((res) => res.text())
+  console.info('API_ATLETAS_PONTUADOS obtido com sucesso.')
 
-      console.log('Dados armazenados no banco de dados com sucesso.')
-    }
-  )
-})()
+  console.info('Arquivos requisitados com sucesso.')
+
+  /* 2. Armazena arquivos no DB */
+
+  console.info('Armazenando dados no banco de dados...')
+
+  const dbFilename = 'data.sqlite'
+  const db = new Database(dbFilename);
+
+  // Cria tabela se não existir
+  db.prepare(`
+    CREATE TABLE IF NOT EXISTS data
+    (
+      DataHora TEXT,
+      API_MERCADO_STATUS TEXT,
+      API_ATLETAS_MERCADO TEXT,
+      API_ATLETAS_PONTUADOS TEXT,
+      API_PARTIDAS TEXT,
+      API_CLUBES TEXT
+    )
+  `)
+    .run();
+
+  // Insere dados
+  db.prepare("INSERT INTO data VALUES (?, ?, ?, ?, ?, ?)")
+    .run(requests_datetime.toISOString(), mercado_status, atletas_mercado,
+      atletas_pontuados, partidas, clubes)
+
+  db.close()
+
+  console.info('Dados armazenados no banco de dados com sucesso.')
+}
+
+main()
