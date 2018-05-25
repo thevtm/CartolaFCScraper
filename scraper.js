@@ -1,7 +1,7 @@
 'use strict'
 
 const fetch = require("node-fetch")
-const Database = require("better-sqlite3")
+var sqlite3 = require('sqlite3')
 
 async function main() {
 
@@ -52,10 +52,10 @@ async function main() {
   console.info('Armazenando dados no banco de dados...')
 
   const dbFilename = 'data.sqlite'
-  const db = new Database(dbFilename);
+  const db = new sqlite3.Database(dbFilename);
 
   // Cria tabela se não existir
-  db.prepare(`
+  db.run(`
     CREATE TABLE IF NOT EXISTS data
     (
       DataHora TEXT,
@@ -66,12 +66,12 @@ async function main() {
       API_CLUBES TEXT
     )
   `)
-    .run();
 
   // Insere dados
   db.prepare("INSERT INTO data VALUES (?, ?, ?, ?, ?, ?)")
     .run(requests_datetime.toISOString(), mercado_status, atletas_mercado,
       atletas_pontuados, partidas, clubes)
+    .finalize()
 
   db.close()
 
