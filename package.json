@@ -26,6 +26,6 @@
   },
   "dependencies": {
     "node-fetch": "^2.1.2",
-    "sqlite3": "^4.0.0"
+    "sqlite3": "^5.0.3"
   }
 }
